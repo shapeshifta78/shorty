@@ -15,6 +15,8 @@ import (
 
 var db *sql.DB
 var indexTemplate *template.Template
+var baseURL string
+var port string
 
 func init() {
 	var err error
@@ -49,6 +51,19 @@ func init() {
 			log.Println("Templates directory created. Please place the index.html file there.")
 		}
 		log.Fatalf("Error loading template: %v", err)
+	}
+
+	// Get environment variables with fallbacks
+	baseURL = os.Getenv("BASE_URL")
+	if baseURL == "" {
+		baseURL = "http://localhost"
+		log.Println("BASE_URL environment variable not set, using default:", baseURL)
+	}
+
+	port = os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+		log.Println("PORT environment variable not set, using default:", port)
 	}
 }
 
@@ -134,11 +149,14 @@ func createShortURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare data for the template
-	baseURL := "http://localhost:8000/"
+	fullBaseURL := baseURL
+	if port != "80" && port != "443" {
+		fullBaseURL = baseURL + ":" + port
+	}
 	data := PageData{
 		ShortURL:     shortURL,
 		LongURL:      longURL,
-		FullShortURL: baseURL + shortURL,
+		FullShortURL: fullBaseURL + "/" + shortURL,
 	}
 
 	// Render template
@@ -178,6 +196,7 @@ func main() {
 	http.HandleFunc("/shorten", createShortURL)
 
 	// Start server
-	fmt.Println("Server running on http://localhost:8000")
-	log.Fatal(http.ListenAndServe(":8000", nil))
+	serverAddr := ":" + port
+	fmt.Printf("Server running on %s%s\n", baseURL, serverAddr)
+	log.Fatal(http.ListenAndServe(serverAddr, nil))
 }
