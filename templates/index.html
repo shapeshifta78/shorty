@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -93,23 +93,23 @@
         <div class="error">{{ .ErrorMessage }}</div>
         {{ end }}
 
-        <input type="text" name="url" placeholder="Geben Sie eine URL ein..." required>
-        <button type="submit">URL kürzen</button>
+        <input type="text" name="url" placeholder="Enter a URL..." required>
+        <button type="submit">Shorten URL</button>
     </form>
 
     {{ if .ShortURL }}
     <div class="result">
         <div class="url-info">
             <p><strong>Original URL:</strong> {{ .LongURL }}</p>
-            <p><strong>Gekürzte URL:</strong> <a href="{{ .FullShortURL }}" target="_blank">{{ .FullShortURL }}</a></p>
+            <p><strong>Shortened URL:</strong> <a href="{{ .FullShortURL }}" target="_blank">{{ .FullShortURL }}</a></p>
         </div>
 
-        <button class="copy-btn" onclick="copyToClipboard('{{ .FullShortURL }}')">In die Zwischenablage kopieren</button>
+        <button class="copy-btn" onclick="copyToClipboard('{{ .FullShortURL }}')">Copy to clipboard</button>
     </div>
     {{ end }}
 
     <footer>
-        &copy; 2025 Shorty - Ein einfacher URL-Kürzungsdienst
+        &copy; 2025 Shorty - A simple URL shortening service
     </footer>
 </div>
 
@@ -124,7 +124,7 @@
 
         const copyBtn = document.querySelector('.copy-btn');
         const originalText = copyBtn.textContent;
-        copyBtn.textContent = 'Kopiert!';
+        copyBtn.textContent = 'Copied!';
 
         setTimeout(() => {
             copyBtn.textContent = originalText;
