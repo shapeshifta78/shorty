@@ -1,6 +1,6 @@
 module github.com/shapeshifta78/shorty
 
-go 1.24.1
+go 1.23.7
 
 require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
