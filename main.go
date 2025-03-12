@@ -149,14 +149,12 @@ func createShortURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare data for the template
-	fullBaseURL := baseURL
-	if port != "80" && port != "443" {
-		fullBaseURL = baseURL + ":" + port
-	}
+	// For Koyeb and other cloud platforms, use the BASE_URL directly without appending the port
+	// as the BASE_URL should already include any necessary port information or be configured for standard ports
 	data := PageData{
 		ShortURL:     shortURL,
 		LongURL:      longURL,
-		FullShortURL: fullBaseURL + "/" + shortURL,
+		FullShortURL: baseURL + "/" + shortURL,
 	}
 
 	// Render template
