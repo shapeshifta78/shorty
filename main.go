@@ -134,7 +134,7 @@ func createShortURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare data for the template
-	baseURL := "http://localhost:8080/"
+	baseURL := "http://localhost:8000/"
 	data := PageData{
 		ShortURL:     shortURL,
 		LongURL:      longURL,
@@ -178,6 +178,6 @@ func main() {
 	http.HandleFunc("/shorten", createShortURL)
 
 	// Start server
-	fmt.Println("Server running on http://localhost:8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Println("Server running on http://localhost:8000")
+	log.Fatal(http.ListenAndServe(":8000", nil))
 }
