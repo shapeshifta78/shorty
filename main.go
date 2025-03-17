@@ -149,12 +149,37 @@ func createShortURL(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Prepare data for the template
-	// For Koyeb and other cloud platforms, use the BASE_URL directly without appending the port
-	// as the BASE_URL should already include any necessary port information or be configured for standard ports
+	// Construct the full short URL with proper handling for localhost
+	var fullShortURL string
+
+	// Check if baseURL contains localhost
+	if strings.Contains(baseURL, "localhost") {
+		// Parse the baseURL to handle different formats
+		if strings.HasSuffix(baseURL, "/") {
+			baseURL = baseURL[:len(baseURL)-1] // Remove trailing slash
+		}
+
+		// Check if baseURL already contains a port
+		if strings.Contains(baseURL, ":") && strings.LastIndex(baseURL, ":") > 5 {
+			// Port is already in the baseURL, use it as is
+			fullShortURL = baseURL + "/" + shortURL
+		} else {
+			// No port in baseURL, add the port
+			fullShortURL = baseURL + ":" + port + "/" + shortURL
+		}
+	} else {
+		// Not localhost, use baseURL as is
+		if strings.HasSuffix(baseURL, "/") {
+			fullShortURL = baseURL + shortURL
+		} else {
+			fullShortURL = baseURL + "/" + shortURL
+		}
+	}
+
 	data := PageData{
 		ShortURL:     shortURL,
 		LongURL:      longURL,
-		FullShortURL: baseURL + "/" + shortURL,
+		FullShortURL: fullShortURL,
 	}
 
 	// Render template
